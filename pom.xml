@@ -31,50 +31,52 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <!--自己项目的启动类-->
-                                    <mainClass>MainClass</mainClass>
-                                </transformer>
-                            </transformers>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                        <exclude>META-INF/*.*</exclude>
-                                        <exclude>META-INF/**/*.*</exclude>
-<!--                                        <exclude>**/module-info.*</exclude>-->
-                                    </excludes>
-                                </filter>
-                                <filter>
-                                    <!--这里重写了 tomcat-embed-core 包的 Tomcat 类-->
-                                    <!--就让 tomcat-embed-core 包的 Tomcat 类在打包时排除，让自己写的不被覆盖-->
-                                    <artifact>com.baomidou:mybatis-plus</artifact>
-                                    <excludes>
-                                        <exclude>com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <!--生成 jar 包的名称后缀-->
-                            <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-                            <minimizeJar>true</minimizeJar>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <version>3.2.4</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>shade</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <transformers>-->
+<!--                                <transformer-->
+<!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+<!--                                    &lt;!&ndash;自己项目的启动类&ndash;&gt;-->
+<!--                                    <mainClass>MainClass</mainClass>-->
+<!--                                </transformer>-->
+<!--                            </transformers>-->
+<!--                            <filters>-->
+<!--                                <filter>-->
+<!--                                    <artifact>*:*</artifact>-->
+<!--                                    <excludes>-->
+<!--                                        <exclude>META-INF/**</exclude>-->
+<!--                                        <exclude>META-INF/*.*</exclude>-->
+<!--                                        <exclude>META-INF/**/*.*</exclude>-->
+<!--                                        &lt;!&ndash;                                        <exclude>**/module-info.*</exclude>&ndash;&gt;-->
+<!--                                    </excludes>-->
+<!--                                </filter>-->
+<!--                                <filter>-->
+<!--                                    &lt;!&ndash;这里重写了 tomcat-embed-core 包的 Tomcat 类&ndash;&gt;-->
+<!--                                    &lt;!&ndash;就让 tomcat-embed-core 包的 Tomcat 类在打包时排除，让自己写的不被覆盖&ndash;&gt;-->
+<!--                                    <artifact>com.baomidou:mybatis-plus</artifact>-->
+<!--                                    <excludes>-->
+<!--                                        <exclude>com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator-->
+<!--                                        </exclude>-->
+<!--                                    </excludes>-->
+<!--                                </filter>-->
+<!--                            </filters>-->
+<!--                            <shadedArtifactAttached>true</shadedArtifactAttached>-->
+<!--                            &lt;!&ndash;生成 jar 包的名称后缀&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <shadedClassifierName>jar-with-dependencies</shadedClassifierName>&ndash;&gt;-->
+<!--                            <minimizeJar>true</minimizeJar>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -85,29 +87,57 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-5</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
                 <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptorRefs>
-                        <descriptor>jar-with-dependencies</descriptor>
-                    </descriptorRefs>
+                    <!-- put your configurations here -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
                     <archive>
                         <manifest>
                             <mainClass>MainClass</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <version>2.2-beta-5</version>-->
+<!--                <configuration>-->
+<!--                    <appendAssemblyId>false</appendAssemblyId>-->
+<!--                    <descriptorRefs>-->
+<!--                        <descriptor>jar-with-dependencies</descriptor>-->
+<!--                    </descriptorRefs>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>MainClass</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>make-assembly</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
